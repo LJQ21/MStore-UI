@@ -14,8 +14,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    import qs from 'qs'
     import { MessageBox, Toast } from 'mint-ui'
     export default {
         name: "OrderItem",
@@ -26,9 +24,7 @@
           exchange(id) {
             MessageBox.prompt('请输入商品兑换码').then(({value,active}) => {
               if(value=='123456'){
-                axios.put("http://127.0.0.1:8080/order",qs.stringify({
-                  id: id
-                })).then(response => {
+                this.$api.orders.addOrder(id).then(response => {
                   Toast({
                     message: '兑换成功',
                     iconClass: 'iconfont icon-success',
@@ -36,7 +32,7 @@
                   this.$emit("checkExchange",1);
                 }).catch(error => {
                   Toast({
-                    message: '兑换失败'
+                    message: '兑换失败'+error
                   })
                 })
               }else {

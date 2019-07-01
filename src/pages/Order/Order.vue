@@ -43,7 +43,7 @@
             }
           },
       mounted(){
-        axios.get('http://127.0.0.1:8080/orders/2019').then(response => {
+          this.$api.orders.getOrders(2019).then(response => {
           let result = response.data;
           let orders=result.data;
           for(let i=0;i<orders.length;i++){
@@ -58,13 +58,13 @@
             }
           }
         }).catch(error => {
-          alert("出错了");
+          alert("error:"+error);
         })
       },
       methods: {
         change(exchange) {
           this.exchange = exchange;
-          axios.get('http://127.0.0.1:8080/orders/2019').then(response => {
+          this.$api.orders.getOrders(2019).then(response => {
             let result = response.data;
             let orders = result.data;
             this.orders=[];
@@ -80,7 +80,7 @@
               }
             }
           }).catch(error => {
-            alert("出错了");
+            alert("error:"+error);
           })
         },
         toExchange(change){

@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import '../static/css/iconfont.css'
 
+import api from './api/index'
+Vue.prototype.$api = api;
+
 import { Header, Popup, Swipe, SwipeItem, Tabbar, TabItem, Button, InfiniteScroll, Navbar, TabContainer, TabContainerItem, Cell } from 'mint-ui'
 
 

@@ -5,7 +5,6 @@
 
 <script>
     import { Toast } from 'mint-ui';
-    import axios from 'axios'
     import { Indicator } from 'mint-ui';
     import GoodsItem from './GoodsItem'
     export default {
@@ -38,12 +37,7 @@
               this.loading = true;
               this.num = this.num + 1;
               setTimeout(() => {
-                axios.get('http://127.0.0.1:8080/products',{
-                  params: {
-                    num: this.num,
-                    size: this.size
-                  }
-                }).then(response => {
+                  this.$api.goods.goodsList(this.num).then(response => {
                   let result = response.data;
                   let data = result.dataList;
                   if(data.length<5){
@@ -51,7 +45,7 @@
                   }
                   this.goods = this.goods.concat(data);
                 }).catch(error => {
-                  alert("出错了");
+                  alert("error:"+error);
                 });
                 this.loading = false;
                 Indicator.close();
@@ -60,16 +54,11 @@
           }
         },
       mounted(){
-        axios.get('http://127.0.0.1:8080/products',{
-          params: {
-            num: 1,
-            size: 5
-          }
-        }).then(response => {
+        this.$api.goods.goodsList().then(response => {
           let result = response.data;
           this.goods = result.dataList;
         }).catch(error => {
-          alert("出错了");
+          alert("出错:"+error);
         })
       }
     }
