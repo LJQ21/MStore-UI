@@ -1,5 +1,5 @@
 <template lang="pug">
-  div(class="goods_show" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="0.1" infinite-scroll-immediate-check="false")
+  div(class="goods_show" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="0" infinite-scroll-immediate-check="false")
     GoodsItem(v-for="(goods_item,index) in goods" :goods_item="goods_item" :key="index" class=" animated flipInX ")
 </template>
 
@@ -37,29 +37,29 @@
               this.loading = true;
               this.num = this.num + 1;
               setTimeout(() => {
-                  this.$api.goods.goodsList(this.num).then(response => {
+                  this.$api.goods.goodsList(this.num,this.size).then(response => {
                   let result = response.data;
-                  let data = result.dataList;
+                  let data = result.data;
                   if(data.length<5){
                     this.end=true;
                   }
                   this.goods = this.goods.concat(data);
-                }).catch(error => {
+                })/*.catch(error => {
                   alert("error:"+error);
-                });
+                });*/
                 this.loading = false;
                 Indicator.close();
-              }, 2500);
+              }, 10);
             }
           }
         },
       mounted(){
         this.$api.goods.goodsList().then(response => {
           let result = response.data;
-          this.goods = result.dataList;
-        }).catch(error => {
+          this.goods = result.data;
+        })/*.catch(error => {
           alert("出错:"+error);
-        })
+        })*/
       }
     }
 </script>

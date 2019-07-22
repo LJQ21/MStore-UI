@@ -1,5 +1,5 @@
 <template lang="pug">
-  div(class="goods")
+  div(class="goods" :style="{ background : activeColor }")
       div(class="goods-picture")
         img(:src="goods_item.img")
       div(class="goods-info")
@@ -10,50 +10,61 @@
             span(class="price") {{goods_item.price}}
           div(class="infos-footer")
             span 剩余：{{goods_item.number}}
-            mt-button(type="primary" size="small" class="primary_btn" @click="buy") 购买
+            mt-button(type="primary" size="small" class="primary_btn" @click="buy()") 购买
 </template>
 
 <script>
-    import qs from 'qs'
-    import axios from 'axios'
-    import { MessageBox, Toast } from 'mint-ui'
-    export default {
-        name: "GoodsItem",
-        props: {
-          goods_item: Object
-        },
-        methods: {
-          buy() {
-            MessageBox.confirm('确定执行此操作?').then(action => {
-              axios.post("http://127.0.0.1:8080/order",qs.stringify({
-                product_id: 4,
-                yb_userid: 2019,
-                yb_username: "李建强",
-                yb_usernick: "小雨",
-                yb_sex: "男",
-                yb_money: "98",
-                create_user: "李建强",
-                modify_user: "李建强"
-              })).then(response => {
-                    Toast({
-                      message: '购买成功',
-                      iconClass: 'iconfont icon-success'
-                    })
-              }).catch(error => {
-                  Toast({
-                    message: '购买失败'
-                  })
-                })
-            });
-          }
+import { MessageBox, Toast } from 'mint-ui'
+export default {
+    name: "GoodsItem",
+    props: {
+      goods_item: Object
+    },
+    methods: {
+      buy() {
+        if (this.goods_item.number === 0) {
+          Toast({
+            message: '已售罄，正在补货',
+            duration: 500
+          })
+        } else {
+          MessageBox({
+            $type:'prompt',
+            title:'输入您的电话号码',
+            message:'请填写您接受兑换码的电话号码',
+            closeOnClickModal:true,   //点击model背景层关闭MessageBox
+            showCancelButton:true,   //显示取消按钮
+            inputPattern:/^1[3456789]\d{9}$/,    //正则条件
+            inputErrorMessage:'请输入正确的电话号码',
+            showInput:true
+          }).then(({ value, action }) => {
+            /* value 为填写的值，进行下一步操作*/
+            this.$api.goods.buyGoods(value,this.goods_item.id, this.goods_item.price).then(response => {
+              Toast({
+                message: '购买成功',
+                iconClass: 'iconfont icon-success'
+              })
+            })/*.catch(err => {
+              Toast({
+                message: '购买失败:'+err,
+              })
+            })*/
+          });
         }
+      }
+    },
+    computed: {
+      activeColor() {
+        return this.goods_item.number===0 ? "#ecf0f1" : 'white'
+      }
     }
+}
 </script>
 
 <style scoped lang="less">
 .goods{
   animate-iteration-count: 10;
-  background-color: white;
+  // background-color: white;
   display: flex;
   .goods-picture{
     display: flex;
@@ -79,7 +90,7 @@
       color: #1a2a3a;
       margin-left: 15px;
       margin-top: 15px;
-      width: 160px;
+      width: 170px;
       height: 130px;
       .describe{
         //white-space:nowrap;
@@ -88,6 +99,7 @@
         height: 25%;
         overflow:hidden;
         text-overflow: clip;
+        color: #4a5a6a;
       }
       h2{
         display: -webkit-box;
@@ -111,6 +123,8 @@
         }
         span{
           margin-top: 10%;
+          font-size: 15px;
+          color: #4a5a6a;
         }
       }
     }

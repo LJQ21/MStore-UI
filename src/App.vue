@@ -1,7 +1,9 @@
 <template lang="pug">
   div(id="app")
-    router-view
-    FooterGuide
+    div(class="body")
+      router-view
+    div(class="foot")
+      FooterGuide
 </template>
 
 <script>
@@ -14,6 +16,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less">
+#app{
+  .body{
+    height: 100%;
+    margin-bottom: 40px;
+  }
+}
 </style>

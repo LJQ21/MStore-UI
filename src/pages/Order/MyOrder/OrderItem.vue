@@ -22,25 +22,23 @@
         },
         methods: {
           exchange(id) {
-            MessageBox.prompt('请输入商品兑换码').then(({value,active}) => {
-              if(value=='123456'){
-                this.$api.orders.addOrder(id).then(response => {
+            if(this.order.status === 0){
+              MessageBox.prompt('请输入商品兑换码和管理员账号').then(({value,active}) => {
+                this.$api.orders.tradeOrder(id,value).then(response => {
                   Toast({
                     message: '兑换成功',
                     iconClass: 'iconfont icon-success',
                   });
                   this.$emit("checkExchange",1);
-                }).catch(error => {
+                })/*.catch(error => {
                   Toast({
                     message: '兑换失败'+error
                   })
-                })
-              }else {
-                Toast({
-                  message: '兑换码错误'
-                })
-              }
-            });
+                })*/
+              });
+            }else {
+              this.$emit("checkPopup",this.order)
+            }
           }
         }
     }

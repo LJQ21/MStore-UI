@@ -1,16 +1,24 @@
-import axios from './http'
+import request from '../utils/http'
 import qs from 'qs'
+import store from '../store/getters'
 
 const orders = {
-  getOrders (id) {
-    return axios.get('/orders/'+id)
+  getOrders () {
+    return request({
+      url: '/orders/selectOrderByUserId',
+      method: 'get'
+    })
   },
-
-  addOrder(id){
-    return axios.put("/order",qs.stringify({
-      id: id
-    }))
+  tradeOrder(id,value) {
+    return request({
+      url: '/user/trade',
+      method: 'get',
+      params: {
+        order_id: id,
+        conversion_code: value
+      }
+    })
   }
-}
+};
 
 export default orders

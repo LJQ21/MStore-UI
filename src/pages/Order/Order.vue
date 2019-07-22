@@ -15,80 +15,77 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    import MyOrder from "./MyOrder/MyOrder"
-    export default {
-        name: "TheOrder",
-        components: {
-          MyOrder
-          },
-          data() {
-            return {
-              exchange: 0,
-              orders: []
-            }
-          },
-          computed: {
-            activeColor1() {
-              return this.exchange?'rgb(77, 85, 93)':'#02a774'
-            },
-            fontSize1() {
-              return this.exchange?'14':'18'
-            },
-            activeColor2() {
-              return this.exchange?'#02a774':'rgb(77, 85, 93)'
-            },
-            fontSize2() {
-              return this.exchange?'18':'14'
-            }
-          },
-      mounted(){
-          this.$api.orders.getOrders(2019).then(response => {
-          let result = response.data;
-          let orders=result.data;
-          for(let i=0;i<orders.length;i++){
-            if(orders[i].status===this.exchange){
+import MyOrder from "./MyOrder/MyOrder"
+export default {
+    name: "TheOrder",
+    components: {
+      MyOrder
+      },
+      data() {
+        return {
+          exchange: 0,
+          orderList: [],
+          page: '',
+          size: ''
+        }
+      },
+      computed: {
+        activeColor1() {
+          return this.exchange?'rgb(77, 85, 93)':'#02a774'
+        },
+        fontSize1() {
+          return this.exchange?'14':'18'
+        },
+        activeColor2() {
+          return this.exchange?'#02a774':'rgb(77, 85, 93)'
+        },
+        fontSize2() {
+          return this.exchange?'18':'14'
+        },
+        orders() {
+          let orders = this.orderList;
+          let result = [];
+          for (let i = 0; i < orders.length; i++) {
+            if (orders[i].status === this.exchange) {
               let order={};
               order.id=orders[i].id;
               order.status=orders[i].status;
+              order.name=orders[i].product.name;
+              order.create_time=orders[i].create_time;
+              order.modify_time=orders[i].modify_time;
               order.img=orders[i].product.img;
               order.describe=orders[i].product.describe;
               order.price=orders[i].product.price;
-              this.orders.push(order);
+              result.push(order);
             }
           }
-        }).catch(error => {
-          alert("error:"+error);
-        })
-      },
-      methods: {
-        change(exchange) {
-          this.exchange = exchange;
-          this.$api.orders.getOrders(2019).then(response => {
-            let result = response.data;
-            let orders = result.data;
-            this.orders=[];
-            for (let i = 0; i < orders.length; i++) {
-              if (orders[i].status === exchange) {
-                let order={};
-                order.id=orders[i].id;
-                order.status=orders[i].status;
-                order.img=orders[i].product.img;
-                order.describe=orders[i].product.describe;
-                order.price=orders[i].product.price;
-                this.orders.push(order);
-              }
-            }
-          }).catch(error => {
-            alert("error:"+error);
-          })
-        },
-        toExchange(change){
-          this.exchange=change;
-          this.change(change);
+          return result
         }
-      }
+      },
+  mounted(){
+      this.$api.orders.getOrders().then(response => {
+      let result = response.data;
+      this.orderList=result.data;
+    })/*.catch(error => {
+      alert("error:"+error);
+    })*/
+  },
+  methods: {
+    change(exchange) {
+      this.exchange = exchange;
+    },
+    toExchange(change){
+      this.exchange=change;
+      this.change(change);
+      this.$api.orders.getOrders().then(response => {
+        let result = response.data;
+        this.orderList=result.data;
+      })/*.catch(error => {
+        alert("error:"+error);
+      })*/
     }
+  }
+}
 </script>
 
 <style scoped lang="less">

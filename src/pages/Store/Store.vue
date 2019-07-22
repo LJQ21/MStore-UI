@@ -2,15 +2,15 @@
   div
     div(class="head")
       //-顶部栏
-      mt-header(fixed title="网薪商城" class="header")
+      mt-header(fixed title="贵民-网薪商城" class="header")
     //-轮播图
     mt-swipe(:auto="4000" class="my-swipe")
       mt-swipe-item(class="slide1")
-        img(src="https://img.alicdn.com/simba/img/TB16fk2cEGF3KVjSZFmSuvqPXXa.jpg")
+        img(src="@/assets/homePage/1553246961521161.jpg")
       mt-swipe-item(class="slide2")
-        img(src="https://img.alicdn.com/simba/img/TB1Yq8rcGWs3KVjSZFxSuuWUXXa.jpg")
+        img(src="@/assets/homePage/1553246961521162.png")
       mt-swipe-item(class="slide3")
-        img(src="//img.alicdn.com/tfs/TB1SpSpcq1s3KVjSZFAXXX_ZXXa-520-280.jpg_q90_.webp")
+        img(src="@/assets/homePage/1556606725838001.png")
     //-主体商品列表
     div(class="main")
       GoodsList
