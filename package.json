@@ -46,7 +46,7 @@
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.8",
     "postcss-url": "^7.2.1",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "pug-cli": "^1.0.0-alpha6",
     "pug-filters": "^3.1.0",
     "pug-loader": "^2.4.0",
